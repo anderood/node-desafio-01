@@ -91,7 +91,22 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+
+    const { id } = request.params ;
+    const { username, userExists } = request;
+
+    const index = userExists.todos.findIndex(item => item.id === id);
+
+    if(index){
+      return response.status(404).json({ error: "Done nao encontrado"})
+    }
+
+    const data = userExists.todos[index];
+
+    data.done = true;
+    
+    return response.status(200).json(data)
+
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
